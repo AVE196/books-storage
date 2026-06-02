@@ -1,7 +1,9 @@
 package ave.bookStorage;
 
+import ave.bookStorage.model.Book;
 import ave.bookStorage.storage.Storage;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -33,11 +35,12 @@ public class Main {
                     storage.printBooks();
                     break;
                 case 2:
-                    System.out.println("введите информацию по книге (автор - название - количество)");
-                    String author = scan.nextLine();
-                    String title = scan.nextLine();
-                    int availableCopies = Integer.parseInt(scan.nextLine());
-                    storage.addBook(author, title, availableCopies);
+                    try {
+                        storage.addBook(createBook(scan));
+                        // TODO конкретные исключения?
+                    } catch (Exception e) {
+                        System.out.println(errorMessage + ". " + e.getMessage());
+                    }
                     break;
                 case 3:
                     // выдать
@@ -53,5 +56,24 @@ public class Main {
                     break;
             }
         }
+    }
+
+    private static int readInt(Scanner scan) {
+        try {
+            //TODO проверка количества?
+            return Integer.parseInt(scan.nextLine().trim());
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Поле \"Количество копий\" не может быть не числом");
+        }
+    }
+
+    private static Book createBook(Scanner scan) {
+        System.out.println("введите информацию по книге (автор - название - количество)");
+        String author = scan.nextLine().trim();
+        if (author.isEmpty()) throw new InputMismatchException("Поле \"Автор\" не может быть пустым");
+        String title = scan.nextLine().trim();
+        if (title.isEmpty()) throw new InputMismatchException("Поле \"Название\" не может быть пустым");
+        int availableCopies = readInt(scan);
+        return new Book(author, title, availableCopies);
     }
 }

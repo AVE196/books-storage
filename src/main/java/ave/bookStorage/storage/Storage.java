@@ -13,8 +13,8 @@ public class Storage {
         books = new ArrayList<>();
     }
 
-    public void addBook(String author, String title, int availableCopies) {
-        books.add(new Book(author, title, availableCopies));
+    public void addBook(Book book) {
+        books.add(book);
     }
 
     public void takeBook() {
