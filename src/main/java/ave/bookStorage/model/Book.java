@@ -1,5 +1,8 @@
 package ave.bookStorage.model;
 
+import ave.bookStorage.exceptions.ItemNotFoundException;
+import ave.bookStorage.exceptions.NotAvailableCopiesException;
+
 public class Book {
 
     private String author;
@@ -14,12 +17,14 @@ public class Book {
         this.availableCopies = availableCopies;
     }
 
-    public void addCopies(int numberCopies) {
-        availableCopies += numberCopies;
+    public void addCopy() {
+        availableCopies++;
     }
 
-    public void giveCopies(int numberCopies) {
-        availableCopies -= numberCopies;
+    public void removeCopy() throws NotAvailableCopiesException {
+        if (availableCopies == 0)
+            throw new NotAvailableCopiesException(author + ", " + title);
+        availableCopies--;
     }
 
     public int getAvailableCopies() {
